@@ -1,56 +1,59 @@
 /* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
 	
-	SAMPLE 05 - SCENE MANAGER
+	SAMPLE 01 - SKELETON CODE 
 
 	This sample illustrates how to:
 
-		1/ Read scene (textures, sprites, animations and objects) from files 
-		2/ Handle multiple scenes in game
-
-	Key classes/functions:
-		CScene
-		CPlayScene		
-
-
-HOW TO INSTALL Microsoft.DXSDK.D3DX
-===================================
-1) Tools > NuGet package manager > Package Manager Console
-2) execute command :  Install-Package Microsoft.DXSDK.D3DX
-
-
+	1/ Re-organize introductory code to an initial skeleton for better scalability
+	2/ CGame is a singleton, playing a role of an "engine".
+	3/ CGameObject is an abstract class for all game objects
+	4/ CTexture is a wrapper class for ID3D10TEXTURE 
+	
+	NOTE: to create transparent background, download GIMP, then use Color to Alpha feature 
 ================================================================ */
 
 #include <windows.h>
 #include <d3d10.h>
 #include <d3dx10.h>
-#include <list>
+#include <vector>
 
 #include "debug.h"
 #include "Game.h"
 #include "GameObject.h"
-#include "Textures.h"
-#include "Animation.h"
-#include "Animations.h"
 
-#include "Mario.h"
-#include "Brick.h"
-#include "Goomba.h"
-#include "Coin.h"
-#include "Platform.h"
+#define WINDOW_CLASS_NAME L"Game Window"
+#define MAIN_WINDOW_TITLE L"01 - Skeleton"
+#define WINDOW_ICON_PATH L"brick.ico"
 
-#include "SampleKeyEventHandler.h"
+#define TEXTURE_PATH_BRICK L"brick.png"
+#define TEXTURE_PATH_MARIO L"mario.png"
 
-#include "AssetIDs.h"
+#define TEXTURE_PATH_MISC L"misc.png"
 
-#define WINDOW_CLASS_NAME L"SampleWindow"
-#define MAIN_WINDOW_TITLE "04 - Collision"
-#define WINDOW_ICON_PATH "mario.ico"
-
-#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
-
+#define BACKGROUND_COLOR D3DXCOLOR(0.5f, 0.5f, 0.5f, 0.0f)
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
+
+
+using namespace std;
+
+CMario *mario;
+#define MARIO_START_X 10.0f
+#define MARIO_START_Y 100.0f
+#define MARIO_START_VX 0.1f
+#define MARIO_START_VY 0.1f
+
+
+CBrick *brick;
+#define BRICK_X 10.0f
+#define BRICK_Y 120.0f
+
+LPTEXTURE texMario = NULL;
+LPTEXTURE texBrick = NULL;
+LPTEXTURE texMisc = NULL;
+
+//vector<LPGAMEOBJECT> objects;  
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -66,12 +69,49 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 /*
+	Load all game resources. In this example, create a brick object and mario object
+*/
+void LoadResources()
+{
+	CGame * game = CGame::GetInstance();
+	texBrick = game->LoadTexture(TEXTURE_PATH_BRICK);
+	texMario = game->LoadTexture(TEXTURE_PATH_MARIO);
+	texMisc = game->LoadTexture(TEXTURE_PATH_MISC);
+
+	// Load a sprite sheet as a texture to try drawing a portion of a texture. See function Render 
+	//texMisc = game->LoadTexture(MISC_TEXTURE_PATH);
+
+	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX, MARIO_START_VY, texMario);
+	brick = new CBrick(BRICK_X, BRICK_Y, texBrick);
+
+	
+	// objects.push_back(mario);
+	// for(i)		 
+	//		objects.push_back(new CGameObject(BRICK_X+i*BRICK_WIDTH,....);
+	//
+
+	//
+	// int x = BRICK_X;
+	// for(i)
+	//		... new CGameObject(x,.... 
+	//		x+=BRICK_WIDTH;
+}
+
+/*
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
 */
 void Update(DWORD dt)
 {
-	CGame::GetInstance()->GetCurrentScene()->Update(dt);
+	/*
+	for (int i=0;i<n;i++)
+		objects[i]->Update(dt);
+	*/
+
+	mario->Update(dt);
+	brick->Update(dt);
+
+	//DebugOutTitle(L"01 - Skeleton %0.1f, %0.1f", mario->GetX(), mario->GetY());
 }
 
 /*
@@ -86,17 +126,27 @@ void Render()
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	if (pD3DDevice != NULL)
+	{
+		// clear the background 
+		pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
 
-	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
+		spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 
-	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
-	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
+		// Use Alpha blending for transparent sprites
+		FLOAT NewBlendFactor[4] = { 0,0,0,0 };
+		pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 
-	CGame::GetInstance()->GetCurrentScene()->Render();
+		brick->Render();
+		mario->Render();
 
-	spriteHandler->End();
-	pSwapChain->Present(0, 0);
+		// Uncomment this line to see how to draw a porttion of a texture  
+		//g->Draw(10, 10, texMisc, 300, 117, 317, 134);
+		//g->Draw(10, 10, texMario, 215, 120, 234, 137);
+
+		spriteHandler->End();
+		pSwapChain->Present(0, 0);
+	}
 }
 
 HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int ScreenHeight)
@@ -135,13 +185,15 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	if (!hWnd) 
 	{
-		OutputDebugString("[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
-		return FALSE;
+		DebugOut(L"[ERROR] CreateWindow failed! ErrCode: %d\nAt: %s %d \n", ErrCode, _W(__FILE__), __LINE__);
+		return 0;
 	}
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
+
+	SetDebugWindow(hWnd);
 
 	return hWnd;
 }
@@ -151,7 +203,7 @@ int Run()
 	MSG msg;
 	int done = 0;
 	ULONGLONG frameStart = GetTickCount64();
-	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
+	ULONGLONG tickPerFrame = 1000 / MAX_FRAME_RATE;
 
 	while (!done)
 	{
@@ -167,20 +219,16 @@ int Run()
 
 		// dt: the time between (beginning of last frame) and now
 		// this frame: the frame we are about to render
-		DWORD dt = (DWORD)(now - frameStart);
+		ULONGLONG dt = now - frameStart;
 
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
-
-			CGame::GetInstance()->ProcessKeyboard();			
-			Update(dt);
+			Update((DWORD)dt);
 			Render();
-
-			CGame::GetInstance()->SwitchScene();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep((DWORD)(tickPerFrame - dt));
 	}
 
 	return 1;
@@ -191,20 +239,17 @@ int WINAPI WinMain(
 	_In_opt_ HINSTANCE hPrevInstance,
 	_In_ LPSTR lpCmdLine,
 	_In_ int nCmdShow
-) {
+) 
+{
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	SetDebugWindow(hWnd);
+	CGame * game = CGame::GetInstance();
+	game->Init(hWnd);
 
-	LPGAME game = CGame::GetInstance();
-	game->Init(hWnd, hInstance);
-	game->InitKeyboard();
+	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 
-	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
-	game->Load(L"mario-sample.txt");  
-
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	LoadResources();
 
 	Run();
 
