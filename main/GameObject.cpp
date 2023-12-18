@@ -1,48 +1,44 @@
 #include <d3dx9.h>
+#include <algorithm>
+
 
 #include "debug.h"
+#include "Textures.h"
 #include "Game.h"
 #include "GameObject.h"
+#include "Sprites.h"
 
-/*
-	Initialize game object 
-*/
-CGameObject::CGameObject(float x, float y, LPTEXTURE tex)
+CGameObject::CGameObject()
 {
-	this->x = x;
-	this->y = y;
-	this->texture = tex;
+	x = y = 0;
+	vx = vy = 0;
+	nx = 1;	
+	state = -1;
+	isDeleted = false;
 }
 
-void CGameObject::Render()
+void CGameObject::RenderBoundingBox()
 {
-	CGame::GetInstance()->Draw(x, y, texture);
+	D3DXVECTOR3 p(x, y, 0);
+	RECT rect;
+
+	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+
+	float l,t,r,b; 
+
+	GetBoundingBox(l, t, r, b);
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = (int)r - (int)l;
+	rect.bottom = (int)b - (int)t;
+
+	float cx, cy; 
+	CGame::GetInstance()->GetCamPos(cx, cy);
+
+	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, BBOX_ALPHA);
 }
 
 CGameObject::~CGameObject()
 {
-	if (texture != NULL) delete texture;
-}
 
-#define MARIO_VX 0.1f
-#define MARIO_WIDTH 14
-
-void CMario::Update(DWORD dt)
-{
-	x += vx*dt;
-
-	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
-	if (x <= 0 || x >= BackBufferWidth - MARIO_WIDTH) {
-		
-		vx = -vx;
-
-		if (x <= 0)
-		{
-			x = 0;
-		}
-		else if (x >= BackBufferWidth - MARIO_WIDTH)
-		{
-			x = (float)(BackBufferWidth - MARIO_WIDTH);
-		}
-	}
 }

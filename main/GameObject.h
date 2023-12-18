@@ -2,48 +2,70 @@
 
 #include <Windows.h>
 #include <d3dx10.h>
+#include <vector>
 
-#include "Texture.h"
+#include "Animation.h"
+#include "Animations.h"
+#include "Sprites.h"
+#include "Collision.h"
+
+using namespace std;
+
+#define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define BBOX_ALPHA 0.25f		// Bounding box transparency
 
 class CGameObject
 {
-protected: 
+protected:
+
 	float x; 
 	float y;
 
-	// This should be a pointer to an object containing all graphic/sound/audio assets for rendering this object. 
-	// For now, just a pointer to a single texture
-	LPTEXTURE texture;			
-public: 
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
-	float GetX() { return x; }
-	float GetY() { return y; }
-
-	CGameObject(float x = 0.0f, float y=0.0f, LPTEXTURE texture = NULL);
-
-	virtual void Update(DWORD dt) = 0;
-	virtual void Render();
-
-	~CGameObject();
-};
-typedef CGameObject * LPGAMEOBJECT;
-
-class CBrick : public CGameObject
-{
-public:
-	CBrick(float x, float y, LPTEXTURE texture): CGameObject(x,y,texture) {}
-	void Update(DWORD dt) {}; 
-};
-
-class CMario : public CGameObject
-{
 	float vx;
 	float vy;
+
+	int nx;	 
+
+	int state;
+
+	bool isDeleted; 
+
 public: 
-	CMario(float x, float y, float vx, float vy, LPTEXTURE texture) :CGameObject(x, y, texture)
-	{
-		this->vx = vx;
-		this->vy = vy;
-	};
-	void Update(DWORD dt);
+	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
+	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
+	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+
+	int GetState() { return this->state; }
+	virtual void Delete() { isDeleted = true;  }
+	bool IsDeleted() { return isDeleted; }
+
+	void RenderBoundingBox();
+
+	CGameObject();
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+
+
+	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {};
+	virtual void Render() = 0;
+	virtual void SetState(int state) { this->state = state; }
+
+	//
+	// Collision ON or OFF ? This can change depending on object's state. For example: die
+	//
+	virtual int IsCollidable() { return 0; };
+
+	// When no collision has been detected (triggered by CCollision::Process)
+	virtual void OnNoCollision(DWORD dt) {};
+
+	// When collision with an object has been detected (triggered by CCollision::Process)
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e) {};
+	
+	// Is this object blocking other object? If YES, collision framework will automatically push the other object
+	virtual int IsBlocking() { return 1; }
+
+	~CGameObject();
+
+	static bool IsDeleted(const LPGAMEOBJECT &o) { return o->isDeleted; }
 };
