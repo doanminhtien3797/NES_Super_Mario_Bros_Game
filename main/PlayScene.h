@@ -23,6 +23,7 @@ protected:
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 
+	
 	void LoadAssets(LPCWSTR assetFile);
 	
 public: 
@@ -34,6 +35,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	void AddObject(CGameObject* obj);
 
 	void Clear();
 	void PurgeDeletedObjects();
