@@ -14,3 +14,17 @@ void CBrick::GetBoundingBox(float &l, float &t, float &r, float &b)
 	r = l + BRICK_BBOX_WIDTH;
 	b = t + BRICK_BBOX_HEIGHT;
 }
+
+void CDecor::Render()
+{
+	CSprites::GetInstance()->Get(spriteId)->Draw(x, y);
+	//RenderBoundingBox();
+}
+
+void CDecor::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = 0;
+	t = 0;
+	r = 0;
+	b = 0;
+}

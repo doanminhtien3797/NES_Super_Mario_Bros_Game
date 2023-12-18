@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+
+#ground
+71000	0	68	15	83	30
+72000	17	68	32	83	30
+73000	34	68	49	83	30
+
+#decor small tree
+60001	85	85	100	100	30
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
