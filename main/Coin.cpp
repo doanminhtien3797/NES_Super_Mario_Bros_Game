@@ -1,6 +1,7 @@
 #include "Coin.h"
 #include "debug.h"
 
+
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -25,8 +26,8 @@ void CCoinBrick::Render()
 
 void CCoinBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	y += COIN_BRICK_SPEED * dt;
-	
+	y += speed * dt;
+	speed += COIN_BRICK_GRAVITY * dt;
 
 	if (lifeTime > COIN_BRICK_LIFE_TIME) {
 		this->Delete();

@@ -3,6 +3,7 @@
 #include "debug.h"
 #include <iostream>
 #include "PlayScene.h"
+#include "Mario.h"
 
 void CBrick::Render()
 {
@@ -35,6 +36,9 @@ void CBrick::OnHitByMario(CMario* mario)
 
 			CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 			playScene->AddObject(coinBrick);
+
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			mario->AddCoin();
 
 			if (coin <= 0){
 				state = BRICK_STATE_EMPTY;
