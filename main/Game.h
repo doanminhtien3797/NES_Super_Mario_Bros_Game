@@ -87,6 +87,7 @@ public:
 	void ProcessKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 
+	D3DXCOLOR BackgroundColor = D3DXCOLOR(0, 0, 0, 0);
 
 	ID3D10Device* GetDirect3DDevice() { return this->pD3DDevice; }
 	IDXGISwapChain* GetSwapChain() { return this->pSwapChain; }

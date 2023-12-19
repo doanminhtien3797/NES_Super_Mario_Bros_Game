@@ -41,6 +41,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="MapScene.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SampleKeyEventHandler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="MapScene.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
@@ -88,9 +90,11 @@
     <Text Include="ground.txt" />
     <Text Include="mario-sample.txt" />
     <Text Include="mario.txt" />
-    <Text Include="scene0005.txt" />
+    <Text Include="scene_1_1.txt" />
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />
+    <Text Include="scene_intro.txt" />
+    <Text Include="scene_map.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

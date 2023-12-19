@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "MapScene.h"
 
 CGame * CGame::__instance = NULL;
 
@@ -457,7 +458,17 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 
-	LPSCENE scene = new CPlayScene(id, path);
+	LPSCENE scene;
+
+	switch (id) {
+
+		case 1: scene = new CMapScene(id, path);
+			break;
+
+		default: scene = new CPlayScene(id, path);
+			break;
+	}
+
 	scenes[id] = scene;
 }
 

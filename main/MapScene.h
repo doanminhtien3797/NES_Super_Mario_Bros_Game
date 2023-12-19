@@ -1,15 +1,16 @@
 #pragma once
+#pragma once
 #include "Game.h"
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
 
 
-class CPlayScene: public CScene
+class CMapScene : public CScene
 {
-protected: 
+protected:
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
+	LPGAMEOBJECT player;
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -19,11 +20,11 @@ protected:
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 
-	
+
 	void LoadAssets(LPCWSTR assetFile);
-	
-public: 
-	CPlayScene(int id, LPCWSTR filePath);
+
+public:
+	CMapScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
 	virtual void Update(DWORD dt);
@@ -39,5 +40,5 @@ public:
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };
 
-typedef CPlayScene* LPPLAYSCENE;
+typedef CMapScene* LPMAPSCENE;
 

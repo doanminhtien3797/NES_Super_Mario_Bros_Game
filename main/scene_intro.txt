@@ -1,0 +1,62 @@
+# list of object assets to load in this scene
+[ASSETS]
+mario.txt
+coin.txt
+cloud.txt
+ground.txt
+brick.txt
+
+[OBJECTS]
+# type	x	y	extra_settings per object type
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
+# 4 = Coin, 5 = Platform, 6 = Decor
+# See OBJECT_TYPE constants in AssetIDs.h
+
+#Decor x y spriteId
+6	100	164	60001
+6	116	164	60001
+6	132	164	60001
+
+#COIN
+4	100	120
+4	120	120
+4	140	120
+4	160	120
+4	180	120
+
+4	100	100
+4	120	100
+4	140	100
+4	160	100
+4	180	100
+
+4	100	80
+4	120	80
+4	140	80
+4	160	80
+4	180	80
+
+#Platform 
+# type	x	y	width	height cells spriteStart spriteMid SpriteEnd
+5	0	180	16	15	32	70004	70005	70006
+5	0	196	16	15	32	70007	70008	70009
+
+5	512	164	16	15	32	70004	70005	70006
+5	512	180	16	15	32	70007	70008	70009
+5	512	196	16	15	32	70007	70008	70009
+
+#Bricks
+1	200	128
+1	216	128
+1	232	128
+1	248	128
+1	264	128
+1	280	128
+
+
+#Portal 
+#50	200	160	216	180	1
+
+# MARIO
+0	120	10
+
