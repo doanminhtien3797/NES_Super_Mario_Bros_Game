@@ -19,14 +19,6 @@
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath):
-	CScene(id, filePath)
-{
-	player = NULL;
-	key_handler = new CSampleKeyHandler(this);
-}
-
-
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
@@ -35,7 +27,20 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define ASSETS_SECTION_SPRITES 1
 #define ASSETS_SECTION_ANIMATIONS 2
 
+#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
+
+
 #define MAX_SCENE_LINE 1024
+
+CPlayScene::CPlayScene(int id, LPCWSTR filePath):
+	CScene(id, filePath)
+{
+	player = NULL;
+	key_handler = new CSampleKeyHandler(this);
+
+	CGame::GetInstance()->BackgroundColor = BACKGROUND_COLOR;
+}
+
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
