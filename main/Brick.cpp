@@ -4,6 +4,7 @@
 #include <iostream>
 #include "PlayScene.h"
 #include "Mario.h"
+#include "Mushroom.h"
 
 void CBrick::Render()
 {
@@ -23,27 +24,43 @@ void CBrick::OnHitByMario(CMario* mario)
 	float mx, my;
 	mario->GetPosition(mx, my);
 
-	//DebugOut(L"mario: %f %f\n", mx, my);
-	//DebugOut(L"brick: %f %f\n", x, y);
-
 	if (state != BRICK_STATE_EMPTY) {
 
 		if (my > y && x - BRICK_BBOX_WIDTH / 2 <= mx && mx <= x + BRICK_BBOX_WIDTH / 2) {
 
-			coin--;
+			if (this->hasMushroom) {
 
-			CCoinBrick* coinBrick = new CCoinBrick(x, y - BRICK_BBOX_HEIGHT / 2);
-
-			CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
-			playScene->AddObject(coinBrick);
-
-			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-			mario->AddCoin();
-
-			if (coin <= 0){
 				state = BRICK_STATE_EMPTY;
 				animId = ID_ANI_BRICK_EMPTY;
+
+				float direction = 1;
+				if (x < mx) {
+					direction = -1;
+				}
+			
+				CMushroom* mushroom = new CMushroom(x, y - BRICK_BBOX_HEIGHT, direction);
+				CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+				playScene->AddObject(mushroom);
+
 			}
+			else {
+				coin--;
+
+				CCoinBrick* coinBrick = new CCoinBrick(x, y - BRICK_BBOX_HEIGHT / 2);
+
+				CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
+				playScene->AddObject(coinBrick);
+
+				CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+				mario->AddCoin();
+
+				if (coin <= 0) {
+					state = BRICK_STATE_EMPTY;
+					animId = ID_ANI_BRICK_EMPTY;
+				}
+			}
+
+			
 			
 		}
 	}

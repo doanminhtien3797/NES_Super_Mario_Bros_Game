@@ -5,6 +5,7 @@ coin.txt
 cloud.txt
 ground.txt
 brick.txt
+mushroom.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -46,12 +47,12 @@ brick.txt
 5	512	196	16	15	32	70007	70008	70009
 
 #Bricks
-1	200	128
-1	216	128
-1	232	128
-1	248	128
-1	264	128
-1	280	128
+1	200	128	1
+1	216	128	1
+1	232	128	1
+1	248	128	1
+1	264	128	3
+1	280	128	100
 
 
 #Portal 

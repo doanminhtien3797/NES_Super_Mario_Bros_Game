@@ -8,7 +8,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "Brick.h"
-
+#include "Mushroom.h"
 #include "Collision.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -43,8 +43,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
+	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = 0;
 	}
@@ -57,6 +56,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CMushroom*>(e->obj))
+		OnCollisionWithMushroom(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -114,6 +115,15 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* b = (CBrick*)e->obj;
 	b->OnHitByMario(this);
+}
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	CMushroom* m = (CMushroom*)e->obj;
+	m->Delete();
+	if (level != MARIO_LEVEL_BIG) {
+		level = MARIO_LEVEL_BIG;
+	}
 }
 
 //

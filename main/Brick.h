@@ -20,6 +20,7 @@ protected:
 	int state;
 	int animId;
 	int coin;
+	bool hasMushroom = false;
 public:
 	CBrick(float x, float y) : CGameObject(x, y) {
 		state = 0;
@@ -27,12 +28,20 @@ public:
 		coin = 1;
 	}
 
-	CBrick(float x, float y, int coin) : CGameObject(x, y) {
+	CBrick(float x, float y, int code) : CGameObject(x, y) {
 		this->state = state;
 		this->animId = 0;
-		this->coin = coin;
+		this->coin = 0;
 
-		if (coin > 0) {
+		if (code <= 10) {
+			this->coin = code;
+		}
+		else if (code == 100) {
+			this->hasMushroom = true;
+		}
+		
+
+		if (coin > 0 || this->hasMushroom) {
 			this->state = BRICK_STATE_COIN;
 			this->animId = ID_ANI_BRICK_COIN;
 		}
