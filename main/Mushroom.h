@@ -5,7 +5,7 @@
 #define MUSHROOM_BBOX_HEIGHT 16
 
 #define MUSHROOM_MOVE_SPEED 0.05f
-#define MUSHROOM_GRAVITY	0
+#define MUSHROOM_GRAVITY	0.00001f
 #define ID_ANI_MUSHROOM		80001
 
 class CMushroom : public CGameObject

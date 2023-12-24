@@ -3,10 +3,10 @@
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left   = x;
-	top    = y;
-	right  = x + MUSHROOM_BBOX_WIDTH;
-	bottom = y + MUSHROOM_BBOX_HEIGHT;
+	left   = x - MUSHROOM_BBOX_WIDTH / 2;
+	top    = y - MUSHROOM_BBOX_HEIGHT / 2;
+	right  = left + MUSHROOM_BBOX_WIDTH;
+	bottom = top + MUSHROOM_BBOX_HEIGHT;
 }
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
