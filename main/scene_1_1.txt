@@ -10,7 +10,7 @@ mushroom.txt
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
-# 4 = Coin, 5 = Platform, 6 = Decor
+# 4 = Coin, 5 = Platform, 6 = Decor, 7 = Obstable
 # See OBJECT_TYPE constants in AssetIDs.h
 
 #Decor x y spriteId
@@ -47,6 +47,9 @@ mushroom.txt
 5	512	196	16	15	32	70007	70008	70009
 
 #Bricks
+# code = 1-10 => has coin, code = 100 => has mushroom
+#   x  y code
+
 1	200	128	1
 1	216	128	1
 1	232	128	1
@@ -57,6 +60,23 @@ mushroom.txt
 
 #Portal 
 #50	200	160	216	180	1
+
+#####################################################################
+#Part 1
+
+# Platform
+
+# Brick 
+
+
+
+
+
+#####################################################################
+#Part 2
+
+
+
 
 # MARIO
 0	120	10

@@ -70,4 +70,18 @@ public:
 	void Render();
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-};;
+};
+
+
+class CObstacle : public CGameObject {
+protected:
+	int spriteId;
+
+public:
+	CObstacle(float x, float y, int spriteId) : CGameObject(x, y) {
+		this->spriteId = spriteId;
+	}
+	void Render();
+	void Update(DWORD dt) {}
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+};

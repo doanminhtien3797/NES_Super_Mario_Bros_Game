@@ -96,8 +96,6 @@
     <Text Include="mario.txt" />
     <Text Include="mushroom.txt" />
     <Text Include="scene_1_1.txt" />
-    <Text Include="scene01.txt" />
-    <Text Include="scene02.txt" />
     <Text Include="scene_1_2.txt" />
     <Text Include="scene_intro.txt" />
     <Text Include="scene_map.txt" />

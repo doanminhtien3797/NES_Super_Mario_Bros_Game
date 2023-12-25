@@ -17,6 +17,12 @@
 70008	17	51	32	66	30
 70009	34	51	49	66	30
 
+# ground brick block
+70010	129	51	144	66	30
+
+#ground wooden block
+70011	170	102	185	117	30
+
 #decor small tree
 60001	85	85	100	100	30
 
