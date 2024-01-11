@@ -14,6 +14,7 @@
 #include "Brick.h"
 #include "Goomba.h"
 #include "Mario.h"
+#include "OneSidePlatform.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -116,21 +117,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
+		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		obj = new CMario(x, y);
+		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: {
-		
+
 		int code = atoi(tokens[3].c_str());
-		obj = new CBrick(x, y, code); 
+		obj = new CBrick(x, y, code);
 		break;
 	}
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
@@ -140,6 +141,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CDecor(x, y, sprite_id);
 		break;
 	}
+
+	case OBJECT_TYPE_ONE_WAY_PLATFORM:
+	{
+		int spriteId = atoi(tokens[3].c_str());
+		obj = new COneSidePlatform(x, y, spriteId);
+		break;
+	}
+
 	case OBJECT_TYPE_PLATFORM:
 	{
 
