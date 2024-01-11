@@ -6,6 +6,7 @@ cloud.txt
 ground.txt
 brick.txt
 mushroom.txt
+goomba.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -19,7 +20,7 @@ mushroom.txt
 #6	132	164	60001
 
 #COIN
-4	100	120
+4	100	1200
 
 
 #Platform 
