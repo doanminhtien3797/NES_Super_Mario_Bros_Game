@@ -142,6 +142,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_OBSTACLE:
+	{
+		int spriteId = atoi(tokens[3].c_str());
+		obj = new CObstacle(x, y, spriteId);
+		break;
+	}
+
 	case OBJECT_TYPE_ONE_WAY_PLATFORM:
 	{
 		int spriteId = atoi(tokens[3].c_str());
