@@ -1,0 +1,13 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#WALK
+35001	0	129	23	147	10
+35002	24	129	47	147	10
+
+#DIE
+36001	48	129	71	147	10
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+6000	35001	100	35002	100
+6001	36001	100
