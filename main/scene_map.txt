@@ -1,10 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 mario.txt
-coin.txt
-cloud.txt
 ground.txt
-brick.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -13,11 +10,8 @@ brick.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 #Decor x y spriteId
-6	150	100	60002
-
-#Portal 
-#50	200	160	216	180	1
+6	150	100	91002
 
 # MARIO
-0	120	10
+0	120	100
 
