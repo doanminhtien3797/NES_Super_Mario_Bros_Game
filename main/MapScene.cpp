@@ -15,7 +15,7 @@
 #include "Goomba.h"
 #include "Mario.h"
 
-#include "SampleKeyEventHandler.h"
+#include "SceneMapKeyHandler.h"
 
 using namespace std;
 
@@ -23,7 +23,7 @@ CMapScene::CMapScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	player = NULL;
-	key_handler = new CSampleKeyHandler(this);
+	key_handler = new CSceneMapKeyHandler(this);
 }
 
 
@@ -280,9 +280,8 @@ void CMapScene::Update(DWORD dt)
 }
 
 void CMapScene::Render()
-{
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+{	
+	CSprites::GetInstance()->Get(91002)->Draw(150, 100);
 }
 
 /*
