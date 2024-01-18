@@ -13,6 +13,21 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (y >= DEAD_HEIGHT && state != MARIO_STATE_DIE) {
+
+		SetState(MARIO_STATE_DIE);
+		return;
+	}
+
+	if (state == MARIO_STATE_DIE) {
+		dieTimer += dt;
+
+		if (dieTimer > MARIO_DELAY_RESET_GAME) {
+			CGame::GetInstance()->InitiateSwitchScene(1);
+			dieTimer = -3000000000;
+		}
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -28,6 +43,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	isOnPlatform = false;
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -123,6 +140,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	m->Delete();
 	if (level != MARIO_LEVEL_BIG) {
 		level = MARIO_LEVEL_BIG;
+		y -= MARIO_SMALL_BBOX_HEIGHT / 2;
 	}
 }
 

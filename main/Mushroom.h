@@ -5,7 +5,7 @@
 #define MUSHROOM_BBOX_HEIGHT 16
 
 #define MUSHROOM_MOVE_SPEED 0.05f
-#define MUSHROOM_GRAVITY	0.00001f
+#define MUSHROOM_GRAVITY	0.0005f
 #define ID_ANI_MUSHROOM		80001
 
 class CMushroom : public CGameObject
@@ -13,7 +13,6 @@ class CMushroom : public CGameObject
 
 protected:
 	float direction;
-	float vx, vy;
 	float ax, ay;
 
 public:
@@ -28,7 +27,8 @@ public:
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
-	int IsBlocking() { return 0; }
+	virtual int IsCollidable() { return 1; };
+	virtual int IsBlocking() { return 0; }
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 	void OnNoCollision(DWORD dt);
 };

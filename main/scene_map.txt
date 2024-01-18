@@ -11,7 +11,3 @@ ground.txt
 
 #Decor x y spriteId
 6	150	100	91002
-
-# MARIO
-0	120	100
-

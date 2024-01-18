@@ -81,6 +81,7 @@
 #pragma endregion
 
 #define GROUND_Y 160.0f
+#define DEAD_HEIGHT 400.0f
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -97,6 +98,8 @@
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 
+#define MARIO_DELAY_RESET_GAME 2000
+
 class CMario : public CGameObject
 {
 	BOOLEAN isSitting;
@@ -109,6 +112,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
 	int coin; 
+	float dieTimer;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
@@ -132,6 +136,7 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		dieTimer = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
