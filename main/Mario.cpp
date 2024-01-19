@@ -10,6 +10,7 @@
 #include "Brick.h"
 #include "Mushroom.h"
 #include "Collision.h"
+#include "Turtle.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -67,6 +68,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	if (dynamic_cast<CTurtle*>(e->obj))
+		OnCollisionWithTurtle(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
@@ -75,6 +78,49 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+}
+
+void CMario::OnCollisionWithTurtle(LPCOLLISIONEVENT e)
+{
+	CTurtle* enemy = dynamic_cast<CTurtle*>(e->obj);
+
+	if (enemy->GetState() != TURTLE_STATE_HIDE)
+	{
+		// jump on top >> kill Goomba and deflect a bit 
+		if (e->ny < 0)
+		{
+			if (enemy->GetState() != TURTLE_STATE_HIDE)
+			{
+				enemy->SetState(TURTLE_STATE_HIDE);
+				vy = -MARIO_JUMP_DEFLECT_SPEED;
+			}
+		}
+		else // hit by Goomba
+		{
+
+			if (untouchable == 0 && enemy->CanHarm())
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+	else {
+
+		float ex, ey;
+		enemy->GetPosition(ex, ey);
+
+		enemy->Slide(x - ex);
+	}
+	
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

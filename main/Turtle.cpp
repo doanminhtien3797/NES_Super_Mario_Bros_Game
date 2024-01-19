@@ -4,13 +4,12 @@ CTurtle::CTurtle(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = TURTLE_GRAVITY;
-	die_start = -1;
 	SetState(TURTLE_STATE_WALKING);
 }
 
 void CTurtle::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == TURTLE_STATE_DIE)
+	if (state != ID_ANI_TURTLE_WALKING)
 	{
 		left = x - TURTLE_BBOX_WIDTH / 2;
 		top = y - TURTLE_BBOX_HEIGHT_DIE / 2;
@@ -47,31 +46,41 @@ void CTurtle::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 }
 
+int CTurtle::CanHarm() {
+
+	if (state == TURTLE_STATE_HIDE) {
+		return false;
+	}
+	else {
+		return slideTimer <= 0;
+	}
+}
+
 void CTurtle::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ((state == TURTLE_STATE_DIE) && (GetTickCount64() - die_start > TURTLE_DIE_TIMEOUT))
-	{
-		isDeleted = true;
-		return;
-	}
-
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	switch (state) {
+		case TURTLE_STATE_SLIDING:
+			slideTimer -= dt;
+			break;
+	}
 }
 
 
 void CTurtle::Render()
 {
 	int aniId = ID_ANI_TURTLE_WALKING;
-	if (state == TURTLE_STATE_DIE)
+	if (state != TURTLE_STATE_WALKING)
 	{
-		aniId = ID_ANI_TURTLE_DIE;
+		aniId = ID_ANI_TURTLE_HIDE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y - 6);
 	//RenderBoundingBox();
 }
 
@@ -80,15 +89,27 @@ void CTurtle::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	caseTURTLE_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (TURTLE_BBOX_HEIGHT - TURTLE_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
-	case TURTLE_STATE_WALKING:
-		vx = -TURTLE_WALKING_SPEED;
-		break;
+		case TURTLE_STATE_SLIDING:
+			slideTimer = TURTLE_SLIDE_TIMEOUT;
+			break;
+
+		case TURTLE_STATE_HIDE :
+			vx = 0;
+			vy = 0;
+			break;
+
+		case TURTLE_STATE_WALKING:
+			vx = -TURTLE_WALKING_SPEED;
+			break;
 	}
+}
+
+void CTurtle::Slide(float direction) {
+
+	int mul = direction < 0 ? 1 : -1;
+
+	vx = TURTLE_SLIDING_SPEED * mul;
+	vy = 0;
+
+	SetState(TURTLE_STATE_SLIDING);
 }

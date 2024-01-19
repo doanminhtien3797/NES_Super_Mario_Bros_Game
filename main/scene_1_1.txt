@@ -7,6 +7,7 @@ ground.txt
 brick.txt
 mushroom.txt
 goomba.txt
+turtle.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -608,3 +609,6 @@ goomba.txt
 
 #Enemy
 2	200	164
+
+#Turtle
+3	400	164

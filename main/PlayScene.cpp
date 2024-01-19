@@ -15,7 +15,7 @@
 #include "Goomba.h"
 #include "Mario.h"
 #include "OneSidePlatform.h"
-
+#include "Turtle.h"
 #include "SampleKeyEventHandler.h"
 
 using namespace std;
@@ -128,6 +128,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_KOOPAS: obj = new CTurtle(x, y); break;
 	case OBJECT_TYPE_BRICK: {
 
 		int code = atoi(tokens[3].c_str());
